@@ -1,0 +1,12 @@
+# Exigence version python (chatterbot ne fonctionna qu'avec python 3.6)
+python_version >= "3.6.0, <3.7.0"
+
+
+# Dépendances principales
+ChatterBot==1.1.0
+spacy==2.1.9
+
+# Note : Installer le modèle de langue séparément
+# Utilisez la commande suivante après l'installation de spaCy :
+# python -m spacy download fr_core_news_sm
+
