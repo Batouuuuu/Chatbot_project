@@ -1,18 +1,34 @@
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
-import spacy
+
 
 
 chatbot = ChatBot(
     "Chopin",
-    tagger_language='fr_core_news_sm',  ## je cherche actuellement comment mettre le français sur chatterbot
     storage_adapter='chatterbot.storage.SQLStorageAdapter',
-    database_uri='sqlite:///database.sqlite3'
+    #database_uri='mongodb://localhost:27017/chatterbot-database', ##connecter avec une db
+
+    preprocessors=[
+    'chatterbot.preprocessors.clean_whitespace',
+    ],
+
+    logic_adapters = [
+        {
+        'import_path': 'chatterbot.logic.BestMatch', 
+        },
+        {
+        'import_path': 'chatterbot.logic.SpecificResponseAdapter',
+        'input_text': 'Aide moi !',
+        'output_text' : 'Euuuh non'
+        }
+    ]
 )
+
 
 conversation = [
     "Salut",
-    "HSalut bg !",
+    "Salut bg !",
+    "Je m'appelle Chopin",
     "Comment ça va ?",
     "Je vais bien",
     "C'est bon à entendre",
@@ -24,5 +40,16 @@ trainer = ListTrainer(chatbot)
 
 trainer.train(conversation)
 
-response = chatbot.get_response("Bonjour !")
-print(response)
+#response = chatbot.get_response("Bonjour !")
+#print(response)
+
+while True:
+    try:
+        user_input = input()
+
+        bot_response = chatbot.get_response(user_input)
+
+        print(bot_response)
+
+    except (KeyboardInterrupt, EOFError, SystemExit):
+        break
